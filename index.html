@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Control Systems - Course Materials & Discussions Hub</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.4);
+            border-radius: 9999px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(156, 163, 175, 0.7);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-sans min-h-full flex flex-col transition-colors duration-200">
+
+    <!-- Navigation Header -->
+    <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand / Course Title -->
+                <div class="flex items-center space-x-3">
+                    <div class="bg-brand-600 text-white p-2.5 rounded-xl shadow-md flex items-center justify-center">
+                        <i class="fa-solid fa-sliders text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-extrabold tracking-wider text-brand-600 dark:text-brand-400 uppercase">ECE 4410 / ME 3302</span>
+                        <h1 class="text-base sm:text-lg font-extrabold text-gray-900 dark:text-white leading-none">Modern Control Systems</h1>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Tabs -->
+                <nav class="hidden md:flex space-x-1">
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-tab px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-2 bg-brand-50 dark:bg-gray-700 text-brand-600 dark:text-brand-400">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Dashboard</span>
+                    </button>
+                    <button onclick="switchTab('materials')" id="nav-materials" class="nav-tab px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <i class="fa-solid fa-folder-open"></i>
+                        <span>Course Materials</span>
+                    </button>
+                    <button onclick="switchTab('forum')" id="nav-forum" class="nav-tab px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <i class="fa-solid fa-comments"></i>
+                        <span>Discussions</span>
+                    </button>
+                </nav>
+
+                <!-- Actions: Theme Toggle & User Info -->
+                <div class="flex items-center space-x-3">
+                    <button id="themeToggleBtn" onclick="toggleTheme()" class="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none" title="Toggle Theme">
+                        <i id="themeIcon" class="fa-solid fa-moon text-lg"></i>
+                    </button>
+
+                    <div class="relative flex items-center space-x-2 border-l pl-3 border-gray-200 dark:border-gray-700">
+                        <div class="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-sm shadow">
+                            AN
+                        </div>
+                        <div class="hidden sm:block text-left">
+                            <p class="text-xs font-semibold text-gray-900 dark:text-white leading-tight">Aschalew Nigussie</p>
+                            <p class="text-[10px] text-gray-500 dark:text-gray-400">Course Instructor</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Row -->
+        <div class="md:hidden flex border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-2 py-1 justify-around text-xs">
+            <button onclick="switchTab('dashboard')" id="mobile-nav-dashboard" class="mobile-nav-tab flex-1 py-2 rounded-md text-center text-brand-600 dark:text-brand-400 font-medium">
+                <i class="fa-solid fa-chart-line block mx-auto mb-1 text-sm"></i>
+                Dashboard
+            </button>
+            <button onclick="switchTab('materials')" id="mobile-nav-materials" class="mobile-nav-tab flex-1 py-2 rounded-md text-center text-gray-600 dark:text-gray-400 font-medium">
+                <i class="fa-solid fa-folder-open block mx-auto mb-1 text-sm"></i>
+                Materials
+            </button>
+            <button onclick="switchTab('forum')" id="mobile-nav-forum" class="mobile-nav-tab flex-1 py-2 rounded-md text-center text-gray-600 dark:text-gray-400 font-medium">
+                <i class="fa-solid fa-comments block mx-auto mb-1 text-sm"></i>
+                Forum
+            </button>
+        </div>
+    </header>
+
+    <!-- Main View Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        
+        <!-- VIEW 1: DASHBOARD -->
+        <section id="view-dashboard" class="tab-content space-y-6">
+            <!-- Welcome Hero Banner -->
+            <div class="bg-gradient-to-r from-brand-600 via-indigo-700 to-blue-800 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
+                <div class="relative z-10">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2.5 py-1 bg-white/20 rounded-full text-xs font-semibold uppercase tracking-wider backdrop-blur-sm">Fall Semester 2026</span>
+                        <span class="px-2.5 py-1 bg-amber-400/20 text-amber-200 rounded-full text-xs font-semibold uppercase tracking-wider backdrop-blur-sm">Instructor: Aschalew Nigussie, MSc</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-black mt-2 tracking-tight">Modern Control Systems Portal</h2>
+                    <p class="text-brand-100 text-xs sm:text-sm max-w-2xl mt-1 leading-relaxed">
+                        Course repository and discussion hub for State-Space Analysis, Linear Quadratic Regulators (LQR), Pole Placement, State Observers, and Discrete-Time Control Theory.
+                    </p>
+                </div>
+                <div class="absolute -right-10 -bottom-10 opacity-10 text-white pointer-events-none">
+                    <i class="fa-solid fa-diagram-project text-[200px]"></i>
+                </div>
+            </div>
+
+            <!-- Stats Overview -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center space-x-4">
+                    <div class="p-3 bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-lg">
+                        <i class="fa-solid fa-users text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Enrolled Students</p>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white" id="stat-students">52</h3>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center space-x-4">
+                    <div class="p-3 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 rounded-lg">
+                        <i class="fa-solid fa-file-pdf text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Course Materials</p>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white" id="stat-materials">0</h3>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center space-x-4">
+                    <div class="p-3 bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 rounded-lg">
+                        <i class="fa-solid fa-comments text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Discussion Threads</p>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white" id="stat-threads">0</h3>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center space-x-4">
+                    <div class="p-3 bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 rounded-lg">
+                        <i class="fa-solid fa-bullhorn text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Announcements</p>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white" id="stat-announcements">0</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Two Column Dashboard Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Left 2 Cols: Recent Announcements & Materials -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Announcements Section -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-base font-bold text-gray-900 dark:text-white flex items-center space-x-2">
+                                <i class="fa-solid fa-bullhorn text-amber-500"></i>
+                                <span>Modern Control Systems Announcements</span>
+                            </h3>
+                            <button onclick="switchTab('forum')" class="text-xs text-brand-600 dark:text-brand-400 hover:underline">View All</button>
+                        </div>
+                        <div id="dashboard-announcements-list" class="space-y-3">
+                            <!-- JS Inject -->
+                        </div>
+                    </div>
+
+                    <!-- Recent Material Uploads -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-base font-bold text-gray-900 dark:text-white flex items-center space-x-2">
+                                <i class="fa-solid fa-clock-rotate-left text-brand-500"></i>
+                                <span>Recently Uploaded Control Systems Materials</span>
+                            </h3>
+                            <button onclick="switchTab('materials')" class="text-xs text-brand-600 dark:text-brand-400 hover:underline">Go to Materials</button>
+                        </div>
+                        <div id="dashboard-recent-materials" class="divide-y divide-gray-100 dark:divide-gray-700">
+                            <!-- JS Inject -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right 1 Col: Quick Links & Control Systems Schedule -->
+                <div class="space-y-6">
+                    <!-- Action Panel -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700 space-y-3">
+                        <h3 class="text-base font-bold text-gray-900 dark:text-white mb-2">Course Management</h3>
+                        <button onclick="switchTab('materials'); openUploadModal();" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-medium py-2.5 px-4 rounded-lg text-sm transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <span>Upload Control Notes/Labs</span>
+                        </button>
+                        <button onclick="switchTab('forum'); openNewPostModal(true);" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-medium py-2.5 px-4 rounded-lg text-sm transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-bullhorn"></i>
+                            <span>Post Announcement</span>
+                        </button>
+                    </div>
+
+                    <!-- Course Schedule Widget -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
+                        <h3 class="text-base font-bold text-gray-900 dark:text-white mb-3 flex items-center space-x-2">
+                            <i class="fa-solid fa-calendar-day text-brand-600"></i>
+                            <span>Key Dates & Lecture Roadmap</span>
+                        </h3>
+                        <ul class="space-y-3 text-xs">
+                            <li class="p-2.5 bg-gray-50 dark:bg-gray-700/50 rounded-lg border-l-4 border-blue-500">
+                                <p class="font-semibold text-gray-900 dark:text-white">Lecture 08: Controllability & Observability</p>
+                                <p class="text-gray-500 dark:text-gray-400">Oct 08 • 10:00 AM - 11:30 AM</p>
+                            </li>
+                            <li class="p-2.5 bg-gray-50 dark:bg-gray-700/50 rounded-lg border-l-4 border-emerald-500">
+                                <p class="font-semibold text-gray-900 dark:text-white">Lab 02: Inverted Pendulum LQR Design (Simulink)</p>
+                                <p class="text-gray-500 dark:text-gray-400">Oct 12 • 11:59 PM Submission</p>
+                            </li>
+                            <li class="p-2.5 bg-gray-50 dark:bg-gray-700/50 rounded-lg border-l-4 border-purple-500">
+                                <p class="font-semibold text-gray-900 dark:text-white">Midterm Exam (State-Space & Lyapunov)</p>
+                                <p class="text-gray-500 dark:text-gray-400">Oct 20 • 02:00 PM - 04:00 PM</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 2: COURSE MATERIALS HUB -->
+        <section id="view-materials" class="tab-content hidden space-y-6">
+            <!-- Header and Filter Toolbar -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="filterMaterials('all')" class="mat-category-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-brand-600 text-white" data-category="all">
+                        All Files
+                    </button>
+                    <button onclick="filterMaterials('Lectures')" class="mat-category-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200" data-category="Lectures">
+                        Lectures
+                    </button>
+                    <button onclick="filterMaterials('Labs')" class="mat-category-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200" data-category="Labs">
+                        MATLAB / Labs
+                    </button>
+                    <button onclick="filterMaterials('Syllabus')" class="mat-category-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200" data-category="Syllabus">
+                        Syllabus
+                    </button>
+                    <button onclick="filterMaterials('Exams')" class="mat-category-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200" data-category="Exams">
+                        Exams & Solutions
+                    </button>
+                </div>
+
+                <div class="flex items-center w-full sm:w-auto space-x-2">
+                    <div class="relative flex-1 sm:w-64">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-xs text-gray-400"></i>
+                        <input type="text" id="materials-search" oninput="renderMaterials()" placeholder="Search control files..." class="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    </div>
+                    <button onclick="openUploadModal()" class="bg-brand-600 hover:bg-brand-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium flex items-center space-x-1 whitespace-nowrap shadow-sm">
+                        <i class="fa-solid fa-upload"></i>
+                        <span>Upload File</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Materials List / Grid -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50 dark:bg-gray-700/50 text-[11px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-700">
+                                <th class="py-3 px-4">Modern Control Resource</th>
+                                <th class="py-3 px-4">Category</th>
+                                <th class="py-3 px-4">File Size</th>
+                                <th class="py-3 px-4">Date Added</th>
+                                <th class="py-3 px-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="materials-table-body" class="divide-y divide-gray-100 dark:divide-gray-700 text-xs">
+                            <!-- JS Inject -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="materials-empty-state" class="hidden p-10 text-center text-gray-500 dark:text-gray-400">
+                    <i class="fa-regular fa-folder-open text-4xl mb-2 opacity-50"></i>
+                    <p>No Modern Control Systems materials found matching your search.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 3: CLASS DISCUSSION FORUM -->
+        <section id="view-forum" class="tab-content hidden space-y-6">
+            <!-- Forum Header Bar -->
+            <div class="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                <!-- Search and Topic Filters -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 flex-1">
+                    <div class="relative flex-1">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-xs text-gray-400"></i>
+                        <input type="text" id="forum-search" oninput="renderForum()" placeholder="Search topics (e.g. LQR, observer, transfer function)..." class="w-full pl-8 pr-3 py-2 text-xs rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    </div>
+                    <select id="forum-topic-filter" onchange="renderForum()" class="py-2 px-3 text-xs rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <option value="all">All Control Topics</option>
+                        <option value="announcement">Announcements</option>
+                        <option value="general">General Q&A</option>
+                        <option value="homework">Homework Help</option>
+                        <option value="labs">MATLAB / Simulink Labs</option>
+                        <option value="exams">Exam Prep</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    <button onclick="openNewPostModal(false)" class="flex-1 sm:flex-none bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg text-xs font-medium flex items-center justify-center space-x-1.5 shadow-sm">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>New Question</span>
+                    </button>
+                    <button onclick="openNewPostModal(true)" class="flex-1 sm:flex-none bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg text-xs font-medium flex items-center justify-center space-x-1.5 shadow-sm">
+                        <i class="fa-solid fa-bullhorn"></i>
+                        <span>Announcement</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Forum Posts List -->
+            <div id="forum-posts-container" class="space-y-4">
+                <!-- JS Inject -->
+            </div>
+            
+            <div id="forum-empty-state" class="hidden bg-white dark:bg-gray-800 rounded-xl p-10 text-center text-gray-500 dark:text-gray-400 border border-gray-100 dark:border-gray-700">
+                <i class="fa-regular fa-comments text-4xl mb-2 opacity-50"></i>
+                <p>No discussion threads found for Modern Control Systems.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL 1: Upload Course Material -->
+    <div id="modal-upload" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-gray-200 dark:border-gray-700 space-y-4">
+            <div class="flex justify-between items-center border-b border-gray-100 dark:border-gray-700 pb-3">
+                <h3 class="text-base font-bold text-gray-900 dark:text-white flex items-center space-x-2">
+                    <i class="fa-solid fa-file-arrow-up text-brand-600"></i>
+                    <span>Upload Control Systems Material</span>
+                </h3>
+                <button onclick="closeModal('modal-upload')" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <form id="upload-form" onsubmit="handleMaterialUpload(event)" class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Resource Title</label>
+                    <input type="text" id="upload-title" required placeholder="e.g., Lecture 05 - State Space & Matrix Exponential" class="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Category</label>
+                        <select id="upload-category" class="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <option value="Lectures">Lectures</option>
+                            <option value="Labs">Labs & MATLAB Code</option>
+                            <option value="Syllabus">Syllabus</option>
+                            <option value="Exams">Exams & Solutions</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Simulated Format</label>
+                        <select id="upload-type" class="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <option value="pdf">PDF Document (.pdf)</option>
+                            <option value="code">MATLAB / Python Code (.m / .py)</option>
+                            <option value="doc">Word Document (.docx)</option>
+                            <option value="zip">Archive File (.zip)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Topics & Syllabus Notes</label>
+                    <textarea id="upload-desc" rows="3" placeholder="Brief summary of equations, state variable methods, or lab objectives..." class="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
+                </div>
+
+                <!-- Drag-and-drop box visualization -->
+                <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-4 text-center bg-gray-50 dark:bg-gray-700/50">
+                    <i class="fa-solid fa-cloud-arrow-up text-2xl text-brand-500 mb-1"></i>
+                    <p class="text-gray-600 dark:text-gray-300 font-medium">Click or Drag file to upload into course portal</p>
+                    <p class="text-[10px] text-gray-400 mt-1">Accepts PDF lecture slides, MATLAB .m files, and Simulink models</p>
+                </div>
+
+                <div class="flex justify-end space-x-2 pt-2 border-t border-gray-100 dark:border-gray-700">
+                    <button type="button" onclick="closeModal('modal-upload')" class="px-4 py-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg font-medium shadow-sm">Publish Material</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: New Discussion Post / Announcement -->
+    <div id="modal-post" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-gray-200 dark:border-gray-700 space-y-4">
+            <div class="flex justify-between items-center border-b border-gray-100 dark:border-gray-700 pb-3">
+                <h3 class="text-base font-bold text-gray-900 dark:text-white flex items-center space-x-2" id="modal-post-title">
+                    <i class="fa-solid fa-pen-to-square text-brand-600"></i>
+                    <span>Create Discussion Thread</span>
+                </h3>
+                <button onclick="closeModal('modal-post')" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <form id="post-form" onsubmit="handleCreatePost(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="post-is-announcement" value="false">
+                
+                <div>
+                    <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Discussion Subject</label>
+                    <input type="text" id="post-title" required placeholder="e.g., Calculating State Transition Matrix using Inverse Laplace Transform" class="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Topic Category</label>
+                    <select id="post-topic" class="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <option value="general">General Control Q&A</option>
+                        <option value="homework">Homework Help</option>
+                        <option value="labs">MATLAB / Simulink Labs</option>
+                        <option value="exams">Exam Prep</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Question / Content Details</label>
+                    <textarea id="post-content" rows="4" required placeholder="Detail your equation, state matrix question, or simulation issue..." class="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
+                </div>
+
+                <div class="flex justify-end space-x-2 pt-2 border-t border-gray-100 dark:border-gray-700">
+                    <button type="button" onclick="closeModal('modal-post')" class="px-4 py-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg font-medium shadow-sm">Post to Forum</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 3: Preview Material File -->
+    <div id="modal-preview" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-gray-200 dark:border-gray-700 space-y-4">
+            <div class="flex justify-between items-center border-b border-gray-100 dark:border-gray-700 pb-3">
+                <div class="flex items-center space-x-2">
+                    <span id="preview-icon-container"></span>
+                    <h3 class="text-base font-bold text-gray-900 dark:text-white" id="preview-filename">File Preview</h3>
+                </div>
+                <button onclick="closeModal('modal-preview')" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-xl border border-gray-200 dark:border-gray-700 space-y-3 min-h-[180px] flex flex-col justify-center">
+                <div class="text-xs text-gray-500 dark:text-gray-400 space-y-1">
+                    <p><strong class="text-gray-700 dark:text-gray-200">Course:</strong> Modern Control Systems (ECE 4410)</p>
+                    <p><strong class="text-gray-700 dark:text-gray-200">Category:</strong> <span id="preview-category"></span></p>
+                    <p><strong class="text-gray-700 dark:text-gray-200">File Size:</strong> <span id="preview-size"></span></p>
+                    <p><strong class="text-gray-700 dark:text-gray-200">Uploaded Date:</strong> <span id="preview-date"></span></p>
+                </div>
+                <div class="p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700 text-xs text-gray-700 dark:text-gray-300 italic" id="preview-desc">
+                    No description available.
+                </div>
+                <div class="text-center p-4 text-xs text-gray-400">
+                    <i class="fa-solid fa-file-circle-check text-3xl mb-1 text-emerald-500 block"></i>
+                    Document verified for Modern Control Systems enrolled students.
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center pt-2">
+                <button onclick="deleteMaterialFromPreview()" class="text-xs text-red-600 hover:text-red-700 dark:text-red-400 font-medium">
+                    <i class="fa-solid fa-trash-can mr-1"></i> Delete Document
+                </button>
+                <div class="flex space-x-2">
+                    <button onclick="closeModal('modal-preview')" class="px-4 py-2 rounded-lg text-xs text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Close</button>
+                    <a id="preview-download-link" href="#" download onclick="simulateDownload(event)" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-medium shadow-sm flex items-center space-x-1">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Download Resource</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Specific Control Systems Mock State Data
+        const DEFAULT_MATERIALS = [
+            {
+                id: 'mat-mcs-1',
+                title: 'Modern Control Systems Syllabus & Office Hours',
+                category: 'Syllabus',
+                type: 'pdf',
+                size: '1.4 MB',
+                date: '2026-09-01',
+                desc: 'Official course outline covering State-Space Models,controlability, observability LQR, Full-State Observer design, Lyapunov stability, and MATLAB control toolboxes.'
+            },
+            {
+                id: 'mat-mcs-2',
+                title: 'Lecture 01 - State Variable Representations of LTI Systems',
+                category: 'Lectures',
+                type: 'pdf',
+                size: '5.2 MB',
+                date: '2026-09-05',
+                desc: 'Formulating x_dot = Ax + Bu and y = Cx + Du from differential equations and electrical/mechanical physical systems.'
+            },
+            {
+                id: 'mat-mcs-3',
+                title: 'Lab 01&02 - DC motor speed control in and Inverted pendulum MATLAB',
+                category: 'Labs',
+                type: 'code',
+                size: '420 KB',
+                date: '2026-09-15',
+                desc: 'MATLAB script (.m) and Simulink block diagrams for linearizing cart-pole dynamics and tuning Q & R weight matrices.'
+            },
+            {
+                id: 'mat-mcs-4',
+                title: 'Lecture 04 - Controllability, Observability, & Pole Placement',
+                category: 'Lectures',
+                type: 'pdf',
+                size: '3.8 MB',
+                date: '2026-09-22',
+                desc: 'Rank condition checks using Kalman controllability matrix C = [B AB A^2B...] and Ackerman formula for pole placement gain K.'
+            },
+            {
+                id: 'mat-mcs-5',
+                title: 'Midterm Practice Exam & Solutions - Modern Control Theory',
+                category: 'Exams',
+                type: 'pdf',
+                size: '2.1 MB',
+                date: '2026-09-28',
+                desc: 'Comprehensive practice exam with step-by-step solutions for state transition matrix e^(At) calculation and phase plane analysis.'
+            }
+        ];
+
+        const DEFAULT_POSTS = [
+            {
+                id: 'post-mcs-1',
+                title: 'Announcement: MATLAB Control System Toolbox Access & Office Hours',
+                author: 'Aschalew Nigussie',
+                role: 'Instructor',
+                topic: 'announcement',
+                isAnnouncement: true,
+                date: '2026-09-29',
+                upvotes: 18,
+                content: 'All Modern Control Systems students now have full access to MATLAB Online with the Control System Toolbox enabled. Make sure to test `ss()`, `place()`, and `lqr()` commands prior to Lab 02.',
+                replies: [
+                    {
+                        author: 'Kebede',
+                        role: 'Student',
+                        date: '2026-09-29',
+                        text: 'Will the Python control library (`control.ss`) be allowed for the homework assignments as well?'
+                    },
+                    {
+                        author: 'Aschalew Nigussie',
+                        role: 'Instructor',
+                        date: '2026-09-30',
+                        text: 'Yes, python-control is permitted as long as your code notebooks are well-documented and clean.'
+                    }
+                ]
+            },
+            {
+                id: 'post-mcs-2',
+                title: 'Question on selecting Q and R matrices for LQR regulator in Homework 3',
+                author: 'Elena Rostova',
+                role: 'Student',
+                topic: 'homework',
+                isAnnouncement: false,
+                date: '2026-10-01',
+                upvotes: 8,
+                content: 'When applying Bryson Rule for initial state weighting on Q = diag([1/x1_max^2, ...]), should we prioritize penalizing control input energy (R) if the actuator saturates at 12V?',
+                replies: [
+                    {
+                        author: 'Mark Lee',
+                        role: 'TA',
+                        date: '2026-10-01',
+                        text: 'Yes! Increasing the R penalty relative to Q will prevent high control effort and keep actuator signals within the 12V limit.'
+                    }
+                ]
+            }
+        ];
+
+        // Global State Variable Load
+        let materials = JSON.parse(localStorage.getItem('mcs_course_materials')) || DEFAULT_MATERIALS;
+        let posts = JSON.parse(localStorage.getItem('mcs_course_posts')) || DEFAULT_POSTS;
+        let activeMaterialCategory = 'all';
+        let currentPreviewId = null;
+
+        // Initialize App on DOM Load
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            renderDashboard();
+            renderMaterials();
+            renderForum();
+        });
+
+        // Local Storage Helper
+        function saveState() {
+            localStorage.setItem('mcs_course_materials', JSON.stringify(materials));
+            localStorage.setItem('mcs_course_posts', JSON.stringify(posts));
+            updateStats();
+        }
+
+        // Navigation Switcher
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`view-${tabName}`).classList.remove('hidden');
+
+            // Desktop Nav Styling
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.className = "nav-tab px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700";
+            });
+            document.getElementById(`nav-${tabName}`).className = "nav-tab px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-2 bg-brand-50 dark:bg-gray-700 text-brand-600 dark:text-brand-400 font-semibold";
+
+            // Mobile Nav Styling
+            document.querySelectorAll('.mobile-nav-tab').forEach(btn => {
+                btn.className = "mobile-nav-tab flex-1 py-2 rounded-md text-center text-gray-600 dark:text-gray-400 font-medium";
+            });
+            document.getElementById(`mobile-nav-${tabName}`).className = "mobile-nav-tab flex-1 py-2 rounded-md text-center text-brand-600 dark:text-brand-400 font-bold";
+        }
+
+        // Theme Management
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                document.getElementById('themeIcon').className = "fa-solid fa-sun text-lg text-amber-400";
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.getElementById('themeIcon').className = "fa-solid fa-moon text-lg";
+            }
+        }
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                document.getElementById('themeIcon').className = "fa-solid fa-moon text-lg";
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                document.getElementById('themeIcon').className = "fa-solid fa-sun text-lg text-amber-400";
+            }
+        }
+
+        // Update Dashboard Statistics & Summary
+        function updateStats() {
+            document.getElementById('stat-materials').textContent = materials.length;
+            document.getElementById('stat-threads').textContent = posts.length;
+            document.getElementById('stat-announcements').textContent = posts.filter(p => p.isAnnouncement).length;
+        }
+
+        function renderDashboard() {
+            updateStats();
+
+            // Render Dashboard Announcements
+            const announcementsList = document.getElementById('dashboard-announcements-list');
+            const announcements = posts.filter(p => p.isAnnouncement);
+
+            if (announcements.length === 0) {
+                announcementsList.innerHTML = `<p class="text-xs text-gray-500 italic">No course announcements published yet.</p>`;
+            } else {
+                announcementsList.innerHTML = announcements.map(ann => `
+                    <div class="p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/40 rounded-lg">
+                        <div class="flex justify-between items-start">
+                            <h4 class="text-xs font-bold text-gray-900 dark:text-white">${escapeHtml(ann.title)}</h4>
+                            <span class="text-[10px] text-gray-500 dark:text-gray-400">${ann.date}</span>
+                        </div>
+                        <p class="text-xs text-gray-600 dark:text-gray-300 mt-1 line-clamp-2">${escapeHtml(ann.content)}</p>
+                    </div>
+                `).join('');
+            }
+
+            // Render Recent Material Uploads
+            const recentMatContainer = document.getElementById('dashboard-recent-materials');
+            const recent = materials.slice(0, 3);
+
+            if (recent.length === 0) {
+                recentMatContainer.innerHTML = `<p class="text-xs text-gray-500 italic py-2">No files available.</p>`;
+            } else {
+                recentMatContainer.innerHTML = recent.map(item => `
+                    <div class="py-2.5 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            ${getFileTypeIcon(item.type)}
+                            <div>
+                                <p class="text-xs font-semibold text-gray-900 dark:text-white hover:text-brand-600 dark:hover:text-brand-400 cursor-pointer" onclick="openPreviewModal('${item.id}')">${escapeHtml(item.title)}</p>
+                                <span class="text-[10px] text-gray-500 dark:text-gray-400">${item.category} • ${item.size}</span>
+                            </div>
+                        </div>
+                        <button onclick="openPreviewModal('${item.id}')" class="text-xs text-brand-600 dark:text-brand-400 font-medium hover:underline">View</button>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Filter and Render Course Materials
+        function filterMaterials(category) {
+            activeMaterialCategory = category;
+            document.querySelectorAll('.mat-category-btn').forEach(btn => {
+                if (btn.dataset.category === category) {
+                    btn.className = "mat-category-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-brand-600 text-white shadow-sm";
+                } else {
+                    btn.className = "mat-category-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600";
+                }
+            });
+            renderMaterials();
+        }
+
+        function renderMaterials() {
+            const searchQuery = document.getElementById('materials-search').value.toLowerCase();
+            const tableBody = document.getElementById('materials-table-body');
+            const emptyState = document.getElementById('materials-empty-state');
+
+            const filtered = materials.filter(item => {
+                const matchesCat = (activeMaterialCategory === 'all' || item.category === activeMaterialCategory);
+                const matchesSearch = item.title.toLowerCase().includes(searchQuery) || item.category.toLowerCase().includes(searchQuery) || item.desc.toLowerCase().includes(searchQuery);
+                return matchesCat && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                tableBody.innerHTML = '';
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                tableBody.innerHTML = filtered.map(item => `
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+                        <td class="py-3 px-4 font-medium text-gray-900 dark:text-white">
+                            <div class="flex items-center space-x-3">
+                                ${getFileTypeIcon(item.type)}
+                                <span class="cursor-pointer hover:text-brand-600 dark:hover:text-brand-400" onclick="openPreviewModal('${item.id}')">${escapeHtml(item.title)}</span>
+                            </div>
+                        </td>
+                        <td class="py-3 px-4">
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${getCategoryBadgeClass(item.category)}">
+                                ${item.category}
+                            </span>
+                        </td>
+                        <td class="py-3 px-4 text-gray-500 dark:text-gray-400">${item.size}</td>
+                        <td class="py-3 px-4 text-gray-500 dark:text-gray-400">${item.date}</td>
+                        <td class="py-3 px-4 text-right space-x-2">
+                            <button onclick="openPreviewModal('${item.id}')" class="p-1.5 text-gray-500 hover:text-brand-600 dark:text-gray-400 dark:hover:text-brand-400" title="Preview File">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                            <a href="#" onclick="simulateDownload(event)" class="p-1.5 text-gray-500 hover:text-brand-600 dark:text-gray-400 dark:hover:text-brand-400" title="Download File">
+                                <i class="fa-solid fa-download"></i>
+                            </a>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        // Upload Handler
+        function handleMaterialUpload(e) {
+            e.preventDefault();
+            const title = document.getElementById('upload-title').value;
+            const category = document.getElementById('upload-category').value;
+            const type = document.getElementById('upload-type').value;
+            const desc = document.getElementById('upload-desc').value;
+
+            const newDoc = {
+                id: 'mat-mcs-' + Date.now(),
+                title: title,
+                category: category,
+                type: type,
+                size: (Math.random() * 4 + 0.5).toFixed(1) + ' MB',
+                date: new Date().toISOString().split('T')[0],
+                desc: desc || 'No additional control theory notes provided.'
+            };
+
+            materials.unshift(newDoc);
+            saveState();
+            renderMaterials();
+            renderDashboard();
+            closeModal('modal-upload');
+            document.getElementById('upload-form').reset();
+        }
+
+        function deleteMaterialFromPreview() {
+            if (!currentPreviewId) return;
+            materials = materials.filter(m => m.id !== currentPreviewId);
+            saveState();
+            renderMaterials();
+            renderDashboard();
+            closeModal('modal-preview');
+        }
+
+        // Render Forum Threads
+        function renderForum() {
+            const searchQuery = document.getElementById('forum-search').value.toLowerCase();
+            const selectedTopic = document.getElementById('forum-topic-filter').value;
+            const container = document.getElementById('forum-posts-container');
+            const emptyState = document.getElementById('forum-empty-state');
+
+            const filtered = posts.filter(post => {
+                const matchesTopic = (selectedTopic === 'all' || post.topic === selectedTopic);
+                const matchesSearch = post.title.toLowerCase().includes(searchQuery) || post.content.toLowerCase().includes(searchQuery);
+                return matchesTopic && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                container.innerHTML = filtered.map(post => `
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-5 shadow-sm border ${post.isAnnouncement ? 'border-amber-300 dark:border-amber-800/60 bg-amber-50/30 dark:bg-amber-900/10' : 'border-gray-100 dark:border-gray-700'} space-y-3">
+                        <div class="flex items-start justify-between gap-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 rounded-full ${post.role === 'Instructor' ? 'bg-amber-600 text-white' : 'bg-brand-600 text-white'} flex items-center justify-center font-bold text-xs">
+                                    ${getInitials(post.author)}
+                                </div>
+                                <div>
+                                    <div class="flex items-center space-x-2">
+                                        <h4 class="text-xs font-bold text-gray-900 dark:text-white">${escapeHtml(post.author)}</h4>
+                                        <span class="px-1.5 py-0.2 text-[9px] rounded font-medium ${post.role === 'Instructor' ? 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200' : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300'}">${post.role}</span>
+                                    </div>
+                                    <p class="text-[10px] text-gray-400">${post.date}</p>
+                                </div>
+                            </div>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${getTopicBadgeClass(post.topic)} uppercase">
+                                ${post.topic}
+                            </span>
+                        </div>
+
+                        <div>
+                            <h3 class="text-sm font-bold text-gray-900 dark:text-white flex items-center space-x-1.5">
+                                ${post.isAnnouncement ? '<i class="fa-solid fa-bullhorn text-amber-500 text-xs"></i>' : ''}
+                                <span>${escapeHtml(post.title)}</span>
+                            </h3>
+                            <p class="text-xs text-gray-700 dark:text-gray-300 mt-1 whitespace-pre-line">${escapeHtml(post.content)}</p>
+                        </div>
+
+                        <!-- Upvote and Comment Bar -->
+                        <div class="flex items-center space-x-4 pt-2 border-t border-gray-100 dark:border-gray-700 text-xs text-gray-500 dark:text-gray-400">
+                            <button onclick="upvotePost('${post.id}')" class="flex items-center space-x-1 hover:text-brand-600 dark:hover:text-brand-400 font-medium">
+                                <i class="fa-regular fa-thumbs-up"></i>
+                                <span>${post.upvotes || 0} Upvotes</span>
+                            </button>
+                            <span class="flex items-center space-x-1">
+                                <i class="fa-regular fa-comment"></i>
+                                <span>${post.replies ? post.replies.length : 0} Replies</span>
+                            </span>
+                        </div>
+
+                        <!-- Thread Replies -->
+                        <div class="mt-3 pl-4 border-l-2 border-gray-200 dark:border-gray-700 space-y-2">
+                            ${(post.replies || []).map(reply => `
+                                <div class="bg-gray-50 dark:bg-gray-700/40 p-2.5 rounded-lg text-xs space-y-1">
+                                    <div class="flex justify-between items-center">
+                                        <span class="font-semibold text-gray-900 dark:text-white">${escapeHtml(reply.author)} <span class="text-[10px] font-normal text-gray-400">(${reply.role})</span></span>
+                                        <span class="text-[10px] text-gray-400">${reply.date}</span>
+                                    </div>
+                                    <p class="text-gray-600 dark:text-gray-300">${escapeHtml(reply.text)}</p>
+                                </div>
+                            `).join('')}
+
+                            <!-- Reply Input Box -->
+                            <form onsubmit="handleAddReply(event, '${post.id}')" class="flex gap-2 pt-2">
+                                <input type="text" placeholder="Write a response or control solution..." required class="flex-1 px-3 py-1.5 text-xs rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+                                <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium">Reply</button>
+                            </form>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Post Handlers
+        function handleCreatePost(e) {
+            e.preventDefault();
+            const title = document.getElementById('post-title').value;
+            const topic = document.getElementById('post-topic').value;
+            const content = document.getElementById('post-content').value;
+            const isAnnouncement = document.getElementById('post-is-announcement').value === 'true';
+
+            const newThread = {
+                id: 'post-mcs-' + Date.now(),
+                title: title,
+                author: 'Aschalew Nigussie',
+                role: 'Instructor',
+                topic: isAnnouncement ? 'announcement' : topic,
+                isAnnouncement: isAnnouncement,
+                date: new Date().toISOString().split('T')[0],
+                upvotes: 1,
+                content: content,
+                replies: []
+            };
+
+            posts.unshift(newThread);
+            saveState();
+            renderForum();
+            renderDashboard();
+            closeModal('modal-post');
+            document.getElementById('post-form').reset();
+        }
+
+        function handleAddReply(e, postId) {
+            e.preventDefault();
+            const input = e.target.querySelector('input');
+            const replyText = input.value;
+            if (!replyText.trim()) return;
+
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                if (!post.replies) post.replies = [];
+                post.replies.push({
+                    author: 'Aschalew Nigussie',
+                    role: 'Instructor',
+                    date: new Date().toISOString().split('T')[0],
+                    text: replyText
+                });
+                saveState();
+                renderForum();
+            }
+            input.value = '';
+        }
+
+        function upvotePost(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                post.upvotes = (post.upvotes || 0) + 1;
+                saveState();
+                renderForum();
+            }
+        }
+
+        // Modal Handlers
+        function openUploadModal() {
+            document.getElementById('modal-upload').classList.remove('hidden');
+        }
+
+        function openNewPostModal(isAnnouncement = false) {
+            document.getElementById('post-is-announcement').value = isAnnouncement;
+            const modalTitle = document.getElementById('modal-post-title');
+            if (isAnnouncement) {
+                modalTitle.innerHTML = `<i class="fa-solid fa-bullhorn text-amber-500"></i><span>Post Control Systems Announcement</span>`;
+            } else {
+                modalTitle.innerHTML = `<i class="fa-solid fa-pen-to-square text-brand-600"></i><span>Create Discussion Thread</span>`;
+            }
+            document.getElementById('modal-post').classList.remove('hidden');
+        }
+
+        function openPreviewModal(matId) {
+            const mat = materials.find(m => m.id === matId);
+            if (!mat) return;
+
+            currentPreviewId = matId;
+            document.getElementById('preview-filename').textContent = mat.title;
+            document.getElementById('preview-category').textContent = mat.category;
+            document.getElementById('preview-size').textContent = mat.size;
+            document.getElementById('preview-date').textContent = mat.date;
+            document.getElementById('preview-desc').textContent = mat.desc || 'No detailed control notes available for this file.';
+            document.getElementById('preview-icon-container').innerHTML = getFileTypeIcon(mat.type);
+
+            document.getElementById('modal-preview').classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        // Utilities
+        function simulateDownload(e) {
+            e.preventDefault();
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-5 right-5 bg-gray-900 text-white px-4 py-2.5 rounded-xl text-xs shadow-xl z-50 flex items-center space-x-2';
+            toast.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i><span>Downloading Modern Control Systems file...</span>`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2500);
+        }
+
+        function getFileTypeIcon(type) {
+            switch (type) {
+                case 'pdf':
+                    return `<i class="fa-solid fa-file-pdf text-red-500 text-base"></i>`;
+                case 'code':
+                    return `<i class="fa-solid fa-file-code text-blue-500 text-base"></i>`;
+                case 'doc':
+                    return `<i class="fa-solid fa-file-word text-brand-600 text-base"></i>`;
+                default:
+                    return `<i class="fa-solid fa-file-zipper text-amber-500 text-base"></i>`;
+            }
+        }
+
+        function getCategoryBadgeClass(category) {
+            switch (category) {
+                case 'Lectures': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/60 dark:text-blue-200';
+                case 'Labs': return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-200';
+                case 'Syllabus': return 'bg-purple-100 text-purple-800 dark:bg-purple-900/60 dark:text-purple-200';
+                case 'Exams': return 'bg-rose-100 text-rose-800 dark:bg-rose-900/60 dark:text-rose-200';
+                default: return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
+            }
+        }
+
+        function getTopicBadgeClass(topic) {
+            switch (topic) {
+                case 'announcement': return 'bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-200';
+                case 'homework': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/60 dark:text-blue-200';
+                case 'labs': return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-200';
+                case 'exams': return 'bg-rose-100 text-rose-800 dark:bg-rose-900/60 dark:text-rose-200';
+                default: return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
+            }
+        }
+
+        function getInitials(name) {
+            return name.split(' ').map(n => n[0]).join('').substring(0, 2);
+        }
+
+        function escapeHtml(str) {
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+    </script>
+</body>
+</html>
